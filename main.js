@@ -244,17 +244,13 @@ productsItems.map((products) => {
   productImageDiv.classList.add("product-image");
   productDetails.classList.add("product-details");
 
-  // productName.className = 'product-name';
-  // productImageDiv.className = 'product-image';
-  // productDetails.className = 'product-details';
-
   productImageDiv.innerHTML = `<img src="${EachProductImage}">`;
   productName.innerHTML = `
     <p> ${EachProductName} </p>
     `;
   productDetails.innerHTML = `
     <p class="product-price"> ${EachProductPrice} </p>
-    <button class="add-to-cart-btn">Add to Cart</button>
+    <button class="add-to-cart-btn" data-name="${EachProductName}" data-price="${EachProductPrice}" data-image="${EachProductImage}">Add to Cart</button>
     `;
 
   productItemDiv.appendChild(productImageDiv);
@@ -279,17 +275,13 @@ productsItems2.map((products) => {
   productImageDiv.classList.add("product-image");
   productDetails.classList.add("product-details");
 
-  // productName.className = 'product-name';
-  // productImageDiv.className = 'product-image';
-  // productDetails.className = 'product-details';
-
   productImageDiv.innerHTML = `<img src="${EachProductImage}">`;
   productName.innerHTML = `
     <p> ${EachProductName} </p>
     `;
   productDetails.innerHTML = `
     <p class="product-price"> ${EachProductPrice} </p>
-    <button class="add-to-cart-btn">Add to Cart</button>
+    <button class="add-to-cart-btn" data-name="${EachProductName}" data-price="${EachProductPrice}" data-image="${EachProductImage}">Add to Cart</button>
     `;
 
   productItemDiv.appendChild(productImageDiv);
@@ -1166,5 +1158,20 @@ categoryDiv.addEventListener("click", () => {
     hiddenCategories.classList.add("active");
   } else {
     hiddenCategories.classList.remove("active");
+  }
+});
+
+// Add to cart functionality
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("add-to-cart-btn")) {
+    const name = e.target.getAttribute("data-name");
+    const price = e.target.getAttribute("data-price");
+    const image = e.target.getAttribute("data-image");
+
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart.push({ name, price, image });
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    alert(`${name} added to cart!`);
   }
 });

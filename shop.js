@@ -1146,7 +1146,7 @@ document.querySelector(".sort").addEventListener("change", (e) => {
 function filterItems(item) {
   let itemsToDisplay;
 
-  if (item === "all") {
+  if (item === "All") {
     itemsToDisplay = AllProducts;
   } else {
     itemsToDisplay = AllProducts.filter((product) => {

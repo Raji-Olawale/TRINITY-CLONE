@@ -5,53 +5,195 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="cart.css">
     <title>Cart</title>
 </head>
 <body>
-    <!-- <header id="Up">
-        <nav>
-          <div class="container nav-container"> 
-            <a href="#" class="logo-link">
-              <img src="Cart/TRINITY LOGO.svg" alt="" class="logo-img">
-            </a>
-  
-            <nav class="nav-search">
-              <div class="search-block">
-                <input class="search-input" type="text" placeholder="Search for Products">
-              </div>
-            </nav>
-  
-            <div class="nav-icons">
-              <span class="search-icon material-symbols-outlined">search</span>
+   <header  class="header-nav-bar">
+        <nav class="container nav-container">
+          <!-- Trinity Logo container -->
+          <div class="image-container">
+            <a href="index.html" class="logo-link">
+
+            <img src="Homepage/Frame 7.png" alt="" class="logo-img">
+           
+          </a>
+
+          </div>
+
+          <!-- Search Box container -->
+          <!-- This search will only appear at Large screen sizes -->
+          <div class="nav-links">
+            <div class="search-container">
+              <input type="text" placeholder="Search for Products" class="search-inputs2">
               
-              <a href="Signuppage/signup.html" class="account"><span class="Account material-symbols-outlined">person</span></a>
-
-
-              <a href="Account/index.html" class="hidden">Account</a>
-
-
-              <a href="Cart/cart.html" class="cart"><span class="material-symbols-outlined">shopping_cart</span></a>
+              <span class="hidden-search material-symbols-outlined">search</span>
               
-              <a href="#" class="hidden">Cart</a>
-              <span class="material-symbols-outlined">menu</span>
             </div>
-          </div> -->
+
+             <div class="hidden-results-container2 " id="hiddenContainer">
+            <!-- <div class="results-list" id="resultList"> -->
+
+            </div>
+          </div>
+
+          <!-- Other Icons and elements -->
+          <div class="nav-section">
+              
+              <div class="nav-icons">
+
+                <!-- Categories Container -->
+                <div class="categories-div" >
+                  <span class="material-symbols-outlined">
+keyboard_arrow_down
+</span>
+                  <a class="category-link" id="categoryDiv" >Categories</a></li>
+                </div>
+
+                <div class="hidden-categories" id="hiddenCategories">
+                  <div class="category-list">
+                    <ul>
+                      <li>Provisions</li>
+                      <li>Drinks</li>
+                      <li>Exotic Wines</li>
+                      <li>Cosmetics</li>
+                      <li>Toiletries</li>
+                      <li>Wears</li>
+                      <li>Gift Items</li>
+                      <!-- <li>Quality Drugs</li> -->
+                    </ul>
+                  </div>
+                </div>
+
+                <!-- Search icon -->
+                <div class="search-container-icon">
+                  <span class="search-icon material-symbols-outlined">search</span>
+              </div>
+             
+              <!-- <div class="acct-container">
+                <a href="Create.html" class="account"><span class="Account material-symbols-outlined">person</span></a>
+                <p>Account</p>
+
+              </div> -->
+
+              <!-- Whislist container -->
+              <div class="whishlist-icon">
+                <a href="wishlist.html" class="whishlist"><span class="material-symbols-outlined">
+                  favorite
+                </span></a>
+                <p class="whishlist-text">Wishlist</p>
+              </div>
+
+              <!-- Cart Container -->
+              <div class="cart-container">
+                <a href="cart.html" class="cart"><span class="material-symbols-outlined">shopping_cart</span></a>
+                <p class="cart-text">Cart</p>
+
+              </div>
+
+              
+              
+              <div class="menu-close-icon">
+                <span class="menu material-symbols-outlined">menu</span>
+                <span class="hidden-close material-symbols-outlined">close</span>
+
+              </div>
+              <div class="mobile-menu">
+                <ul>
+                  <li><a href="#categories-section">Categories</a></li>
+                  <li><a href="#">Wishlist</a></li>
+                </ul>
+            </div>
+              
+
+              <!-- Hidden Contents -->
+              
+            </div>
+          </div>
+          
+        </nav>
+
+
+        <!-- A modal for search items -->
+
+        <div class="modal-search">
+<div class="close-container">
+  <span class="close-menu material-symbols-outlined">close</span>
+</div>
+
+
+          <div class="search-message">
+            <p>What are you searching for?</p>
+          </div>
+
+          <div class="search-container">
+              <input type="text" placeholder="Search for Products" class="search-inputs">
+              
+              <span class="hidden-search material-symbols-outlined">search</span>
+              
+            </div>
+            <div class="hidden-results-container " id="hiddenContainer2">
+            <!-- <div class="results-list" id="resultList"> -->
+
+            </div>
+        </div>
+        
+        <!-- This search will only appear at mobile screen sizes -->
+          <div class="nav-search">
+            <div class="search-container">
+                         <!-- <span class="hidden-search material-symbols-outlined">search</span> -->
+              <input type="text" placeholder="Search for Products" class="search-inputs">
+              
+              <span class="close-menu material-symbols-outlined">close</span>
+              </div> 
+            </div>
 
           
-            <div class="search-container">
-              <input type="text" placeholder="Search for Products" class="search-input"><span class="hidden-search material-symbols-outlined">search</span>
-              <button class="search-button"></button>
-            </div>
-        </nav>
+
+
       </header>
-    <div class="cart-empty-container">
+
+<main>
+  <section class="cart-header">
+    <div class="cart-header-content">
+      <h1>Your Shopping Cart</h1>
+      <nav>
+        <a href="index.html">Home</a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="cart-content">
+    <div class="cart-items-container">
+      <div class="cart-items">
+        <h3>Products</h3>
+        <div class="cart-item-list">
+          <!-- Cart items will be dynamically added here -->
+        </div>
+      </div>
+
+      <div class="cart-summary">
+        <h3>Total</h3>
+        <div class="cart-total-price">
+          <!-- Total price will be calculated here -->
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+
+
+
+    <!-- <div class="cart-empty-container">
         <div class="cart-icon">&#128722;</div>
         <h1>Your Cart is Empty</h1>
         <p>Looks like you haven't added anything to your cart yet.</p>
         <a href="index.html" class="shop-btn">Continue Shopping</a>
-    </div>
+    </div> -->
 
+    <script src="main.js"></script>
     <script src="cart.js"></script>
 </body>
 </html>

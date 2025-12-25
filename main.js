@@ -120,6 +120,67 @@ function nextBtn3() {
   slideThrough();
 }
 
+// Get cart from localStorage
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+// Function to save cart to localStorage
+function saveCart() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+// Function to find item in cart by name
+function findCartItem(name) {
+  return cart.find((item) => item.name === name);
+}
+
+// Function to update cart display for a product
+function updateProductDisplay(productDetails, name) {
+  const item = findCartItem(name);
+  if (item && item.quantity > 0) {
+    productDetails.innerHTML = `
+      <p class="product-price">${item.price}</p>
+      <div class="quantity-controls">
+        <button class="decrement-btn" data-name="${name}">-</button>
+        <span class="quantity" data-name="${name}">${item.quantity}</span>
+        <button class="increment-btn" data-name="${name}">+</button>
+      </div>
+    `;
+  } else {
+    productDetails.innerHTML = `
+      <p class="product-price">${
+        item
+          ? item.price
+          : productDetails.querySelector(".product-price").textContent
+      }</p>
+      <button class="add-to-cart-btn" data-name="${name}" data-price="${
+      item
+        ? item.price
+        : productDetails
+            .querySelector(".add-to-cart-btn")
+            .getAttribute("data-price")
+    }" data-image="${
+      item
+        ? item.image
+        : productDetails
+            .querySelector(".add-to-cart-btn")
+            .getAttribute("data-image")
+    }">Add to Cart</button>
+    `;
+  }
+}
+
+// Function to update all product displays
+function updateAllProductDisplays() {
+  const allProductDetails = document.querySelectorAll(".product-details");
+  allProductDetails.forEach((productDetails) => {
+    const addBtn = productDetails.querySelector(".add-to-cart-btn");
+    if (addBtn) {
+      const name = addBtn.getAttribute("data-name");
+      updateProductDisplay(productDetails, name);
+    }
+  });
+}
+
 // Using Array of objects to fill the product items list
 
 const productsItems = [
@@ -243,8 +304,12 @@ productsItems.map((products) => {
   productName.classList.add("product-name");
   productImageDiv.classList.add("product-image");
   productDetails.classList.add("product-details");
+  productDetails.setAttribute("data-name", EachProductName);
+  productDetails.setAttribute("data-price", EachProductPrice);
+  productDetails.setAttribute("data-image", EachProductImage);
 
-  productImageDiv.innerHTML = `<img src="${EachProductImage}">`;
+  productImageDiv.style.position = "relative";
+  productImageDiv.innerHTML = `<img src="${EachProductImage}"><i class="fa-regular fa-heart wishlist-icon" style="position: absolute; top: 10px; right: 0px;  cursor: pointer; font-size: 20px;" data-name="${EachProductName}" data-price="${EachProductPrice}" data-image="${EachProductImage}"></i>`;
   productName.innerHTML = `
     <p> ${EachProductName} </p>
     `;
@@ -275,7 +340,8 @@ productsItems2.map((products) => {
   productImageDiv.classList.add("product-image");
   productDetails.classList.add("product-details");
 
-  productImageDiv.innerHTML = `<img src="${EachProductImage}">`;
+  productImageDiv.style.position = "relative";
+  productImageDiv.innerHTML = `<img src="${EachProductImage}"><i class="fa-regular fa-heart wishlist-icon" style="position: absolute; top: 10px; right: 0px;  cursor: pointer; font-size: 20px;" data-name="${EachProductName}" data-price="${EachProductPrice}" data-image="${EachProductImage}"></i>`;
   productName.innerHTML = `
     <p> ${EachProductName} </p>
     `;
@@ -1078,20 +1144,44 @@ searchBox.addEventListener("input", (e) => {
   if (filteredItems.length === 0) {
     inputText.innerHTML = "<p>No results found</p>";
   } else {
-    filteredItems.forEach((item) => {
-      const newDiv = document.createElement("div");
-      newDiv.innerHTML = `<div class="results-container">
-      <div>
-      <p>${item.name}</p>
-      <p>${item.price}</p>
-      </div>
-      <div>
-      <img width="90px" src="${item.image}">
-      </div>
+    let displayedCount = 4;
+    const displayItems = (count) => {
+      inputText.innerHTML = "";
+      const itemsToShow = filteredItems.slice(0, count);
+      itemsToShow.forEach((item) => {
+        const newDiv = document.createElement("div");
+        newDiv.innerHTML = `<div class="results-container">
+        <div>
+        <p>${item.name}</p>
+        <p>${item.price}</p>
         </div>
-      `;
-      inputText.appendChild(newDiv);
-    });
+        <div>
+        <img width="90px" src="${item.image}">
+        </div>
+          </div>
+        `;
+        inputText.appendChild(newDiv);
+      });
+      if (count < filteredItems.length) {
+        const showMoreBtn = document.createElement("button");
+        showMoreBtn.textContent = "Show More";
+        showMoreBtn.classList.add("show-more-btn");
+        showMoreBtn.style.display = "block";
+        showMoreBtn.style.margin = "10px auto";
+        showMoreBtn.style.padding = "8px 16px";
+        showMoreBtn.style.backgroundColor = "#007bff";
+        showMoreBtn.style.color = "white";
+        showMoreBtn.style.border = "none";
+        showMoreBtn.style.borderRadius = "4px";
+        showMoreBtn.style.cursor = "pointer";
+        showMoreBtn.addEventListener("click", () => {
+          displayedCount += 4;
+          displayItems(displayedCount);
+        });
+        inputText.appendChild(showMoreBtn);
+      }
+    };
+    displayItems(displayedCount);
   }
 
   // console.log({filteredItems});
@@ -1168,10 +1258,56 @@ document.addEventListener("click", (e) => {
     const price = e.target.getAttribute("data-price");
     const image = e.target.getAttribute("data-image");
 
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    cart.push({ name, price, image });
-    localStorage.setItem("cart", JSON.stringify(cart));
+    const existingItem = findCartItem(name);
+    if (existingItem) {
+      existingItem.quantity = (existingItem.quantity || 1) + 1;
+    } else {
+      cart.push({ name, price, image, quantity: 1 });
+    }
+    saveCart();
+    updateAllProductDisplays();
 
     alert(`${name} added to cart!`);
+  }
+});
+
+// Increment and decrement functionality
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("increment-btn")) {
+    const name = e.target.getAttribute("data-name");
+    const item = findCartItem(name);
+    if (item) {
+      item.quantity = (item.quantity || 1) + 1;
+      saveCart();
+      updateAllProductDisplays();
+    }
+  }
+  if (e.target.classList.contains("decrement-btn")) {
+    const name = e.target.getAttribute("data-name");
+    const item = findCartItem(name);
+    if (item && item.quantity > 1) {
+      item.quantity -= 1;
+      saveCart();
+      updateAllProductDisplays();
+    } else if (item && item.quantity === 1) {
+      cart = cart.filter((i) => i.name !== name);
+      saveCart();
+      updateAllProductDisplays();
+    }
+  }
+});
+
+// Add to wishlist functionality
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("wishlist-icon")) {
+    const name = e.target.getAttribute("data-name");
+    const price = e.target.getAttribute("data-price");
+    const image = e.target.getAttribute("data-image");
+
+    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    wishlist.push({ name, price, image });
+    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+
+    alert(`${name} added to wishlist!`);
   }
 });
